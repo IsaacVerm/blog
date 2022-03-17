@@ -4,6 +4,19 @@
 
 `gatsby develop`
 
+## Add post
+
+[How-to on Gatsby site](https://www.gatsbyjs.com/docs/how-to/routing/adding-markdown-pages):
+
+1) source
+2) transform
+3) page template
+4) add post
+
+If you don't need to add a different type of post step 4 should be sufficient. 
+
+Posts are added at `src/posts`.
+
 ## Explanation files
 
 A quick look at the top-level files and directories you'll see in a Gatsby project.
