@@ -12,7 +12,7 @@ You need to make decisions based on varying inputs and those decisions decide wh
 
 ## How to write an if-else statement?
 
-```
+```javascript
 if (condition) {
 	code to run if condition is true
 } else {
@@ -70,7 +70,7 @@ When the condition is always the same for each choice.
 
 ## How to write a switch statement?
 
-```
+```javascript
 switch (condition) {
 	case choice1:
 		code
