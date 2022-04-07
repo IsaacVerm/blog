@@ -127,6 +127,23 @@ For example you could [use XPath instead of CSS selectors](https://github.com/pu
 
 Another advantage of using the standard Web APIs is you can already check if your selection is working correctly in the browser itself by using the browser developer tools.
 
-![Alt text here](/get-href-masterrussian.png)
+![Dev tools used to check if selection will work](/get-href-masterrussian.png)
+
+### You can't iterate over a NodeList
+
+A `NodeList` is a [collection of nodes](https://developer.mozilla.org/en-US/docs/Web/API/NodeList) but it's not an `Array` although in some ways it does behave like one.
+For instance just like an `Array` a `NodeList` has the `forEach` method.
+However, it doesn't provide all the iterator methods the `Array` does provide.
+In my case I wanted to use the `map` method to get the text for each element:
+
+```javascript
+const russian = [...document.querySelectorAll('.phrase_plain .first')].map(element => element.innerText)
+```
+
+The crucial part in the code above is the three dots.
+This [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) turns the `NodeList` into an `Array`.
+That way we can use the `map` method.
+
+![NodeList has no map method](/nodelist-has-no-map-method.png)
 
 ## Conclusion
