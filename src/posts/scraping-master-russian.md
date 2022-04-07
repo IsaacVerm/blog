@@ -127,6 +127,6 @@ For example you could [use XPath instead of CSS selectors](https://github.com/pu
 
 Another advantage of using the standard Web APIs is you can already check if your selection is working correctly in the browser itself by using the browser developer tools.
 
-![Hopper The Rabbit](./get-href-masterrussian.png)
+![Alt text here](/get-href-masterrussian.png)
 
 ## Conclusion
