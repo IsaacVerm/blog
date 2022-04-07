@@ -82,7 +82,9 @@ This file contains the error and the link causing that error.
 If later on I still want to improve this script I'll have a nice basis to start from.
 
 
-## Obstacles
+## Obstacles and interesting titbits
+
+I kept a list of issues I struggled with and interesting discoveries during the development of the script.
 
 ### No Puppeteer knowledge
 
@@ -146,4 +148,87 @@ That way we can use the `map` method.
 
 ![NodeList has no map method](/nodelist-has-no-map-method.png)
 
+### My knowledge about CSS selectors is very incomplete
+
+I know the [basic CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) but there's a lot more to learn about them. For example you can use the `nth-child` selector in multiple ways. Before I always used it as `element:nth-child({integer})`. But if you add the letter n next to the integer like `element:nth-child({integer}n)` it will select every nth-child instead of just one.
+
+### map is a very versatile function
+
+In the script I used `map` in 3 very different ways:
+
+1. to extract the translations from all the phrase nodes
+2. to zip two arrays together
+3. to create a sequence of increasing numbers to make the initial links
+
+Extracting the translations was the most straightforward usage:
+
+```javascript
+const russian = [...document.querySelectorAll('.phrase_plain .first')].map(element => element.innerText)
+```
+
+For each phrase I extract the `innerText` and save the result in the variable `russian`.
+
+The other 2 ways to use `map` are a bit more creative and I didn't come up with them myself.
+
+```javascript
+return russian.map((a, i) => {
+    return { "russian": a, "english": english[i] }
+})
+```
+
+In my script I first got all the Russian translations and then all the English ones leaving me with two separate arrays.
+To turn this into a single array of translations I take advantage of the fact the `map` method gives you [access to the index of the current iteration](https://stackoverflow.com/a/22015771).
+
+The last way I used `map` is to create the suffixes in the initial links:
+
+```javascript
+const suffixes = ['', Array(11).fill().map((element, index) => `_${index + 2}`)].flat()
+```
+
+You first create an array of a certain length with each element being empty.
+Since you have access to the index and that index increases by 1 over each iteration,
+you can create a sequence of consecutive numbers.
+
+### `forEach` doesn't work in a asynchronous way
+
+Once I had my array of initial links, I thought I could just loop over it with `forEach` opening a page on each iteration.
+However, that's [not how forEach works](https://stackoverflow.com/a/49787226).
+Here's a place for the `for...of` loop to use.
+
+### saving JavaScript data to csv is very easy
+
+There's [no need for any external libraries](https://nodejs.org/en/knowledge/advanced/streams/how-to-use-fs-create-write-stream/). 
+You just create a stream and start writing to it.
+The only part where an external library would come in handy is putting the data in the correct csv format.
+Without a library you have to write newlines, quotes, ... yourself based on the csv spec.
+
+### error handling is a necessity when scraping
+
+When scraping there's a lot of things which can go wrong.
+Sometimes URLs are malformed, sometimes there are time outs, ...
+It's hard to know in advance what exactly might go wrong.
+Even worse is it might go wrong at the very end of you scraping,
+obliging you to run the whole script again.
+That's why it's better to add some error handling with `try...catch`.
+
+For this script I added some code to the `catch` part:
+
+```javascript
+catch (error) {
+    writeErrorToStream(link, error, errorStream)
+}
+```
+
+When something goes wrong it saves the failing link and the exact error to file.
+This way I can improve on the script later on if I return to it.
+
+## Further improvements
+
+- For now I just copy code from my script in this post. It would be nice to have code snippets you can execute in the post itself.
+- My debugging process is still very basic. It's time to move beyond `console.log`.
+- I get the basic gist of working with asynchronicity in JavaScript but would benefit from looking into it more in-depth
+
 ## Conclusion
+
+This was a nice little project to get back into programming in JavaScript.
+Keeping a log while doing the programming and reflecting on issues faced afterwards is very enjoyable and a way of working I'll try to repeat.
